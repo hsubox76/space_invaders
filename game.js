@@ -1,28 +1,39 @@
 ;(function() {
-  var Game = function(canvasId) {
+  var Game = function(canvasId, runGame) {
+    document.getElementById("gameover").style.opacity = "0";
     var canvas = document.getElementById(canvasId);
     var screen = canvas.getContext('2d');
     var gameSize = { x: canvas.width, y: canvas.height };
+    this.runGame = runGame || false;
 
     this.bodies = createInvaders(this).concat(new Player(this, gameSize));
 
     var self = this;
+    document.getElementById("start").onclick = function() {
+      self.runGame = true;
+    };
+
     loadSound("laser.mp3", function (shootSound) {
       self.shootSound = shootSound;
       var tick = function () {
-        self.update();
-        self.draw(screen, gameSize);
+        if (self.runGame) {
+          self.update();
+          self.draw(screen, gameSize);
+        }
         requestAnimationFrame(tick);
       };
 
       tick();
     });
+
   };
 
   Game.prototype = {
 
     update: function () {
       var bodies = this.bodies;
+      var playerThere = false;
+      var invaderThere = false;
       var notCollidingWithAnything = function (b1) {
         return bodies.filter(function(b2) { return colliding (b1,b2); }).length === 0;
       };
@@ -30,7 +41,31 @@
       this.bodies = this.bodies.filter(notCollidingWithAnything);
 
       for (var i = 0; i < this.bodies.length; i++) {
+        if (this.bodies[i] instanceof Player) {
+          playerThere = true;
+        }
+        if (this.bodies[i] instanceof Invader) {
+          invaderThere = true;
+        }
         this.bodies[i].update();
+      }
+      if (!playerThere) {
+        document.getElementById("gameover").style.opacity = "1";
+        this.runGame = false;
+        document.getElementById("start").innerHTML = "Play Again?";
+        document.getElementById("gameover").innerHTML = "GAME OVER";
+        document.getElementById("start").onclick = function() {
+          new Game('screen', true);
+        };
+      }
+      if (!invaderThere) {
+        document.getElementById("gameover").style.opacity = "1";
+        this.runGame = false;
+        document.getElementById("start").innerHTML = "Play Again?";
+        document.getElementById("gameover").innerHTML = "PLAYER WINS";
+        document.getElementById("start").onclick = function() {
+          new Game('screen', true);
+        };
       }
     },
 

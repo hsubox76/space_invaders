@@ -1,0 +1,29 @@
+html {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 16px;
+  text-align: center;
+}
+
+button {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 16px;
+  padding: 5px;
+  color: #ffffff;
+  background-color: #000;
+  box-shadow: 3px 3px 0px gray;
+}
+
+button:hover {
+  color: #EEEA9A;
+  border: 2px solid #fff;
+}
+
+#gameover {
+  position: relative;
+  font-size: 24px;
+  letter-spacing: 0.3em;
+  left: auto;
+  top: 150px;
+  z-index: 1;
+  opacity: 0;
+}
