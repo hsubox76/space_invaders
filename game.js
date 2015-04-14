@@ -4,6 +4,9 @@
     var canvas = document.getElementById(canvasId);
     var screen = canvas.getContext('2d');
     var gameSize = { x: canvas.width, y: canvas.height };
+    if (runGame) {
+      document.getElementById("start").style.opacity = "0";
+    }
     this.runGame = runGame || false;
 
     this.bodies = createInvaders(this).concat(new Player(this, gameSize));
@@ -11,6 +14,7 @@
     var self = this;
     document.getElementById("start").onclick = function() {
       self.runGame = true;
+      document.getElementById("start").style.opacity = "0";
     };
 
     loadSound("laser.mp3", function (shootSound) {
@@ -51,6 +55,7 @@
       }
       if (!playerThere) {
         document.getElementById("gameover").style.opacity = "1";
+        document.getElementById("start").style.opacity = "1";
         this.runGame = false;
         document.getElementById("start").innerHTML = "Play Again?";
         document.getElementById("gameover").innerHTML = "GAME OVER";
@@ -60,6 +65,7 @@
       }
       if (!invaderThere) {
         document.getElementById("gameover").style.opacity = "1";
+        document.getElementById("start").style.opacity = "1";
         this.runGame = false;
         document.getElementById("start").innerHTML = "Play Again?";
         document.getElementById("gameover").innerHTML = "PLAYER WINS";
