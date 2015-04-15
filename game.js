@@ -41,7 +41,10 @@
       var playerThere = false;
       var invaderThere = false;
       var notCollidingWithAnything = function (b1) {
-        return bodies.filter(function(b2) { return colliding (b1,b2); }).length === 0;
+        return bodies.filter(function(b2) {
+          if (!(b1 instanceof Bullet && b2 instanceof InvaderBullet) && !(b2 instanceof Bullet && b1 instanceof InvaderBullet))
+            return colliding (b1,b2);
+        }).length === 0;
       };
 
       this.bodies = this.bodies.filter(notCollidingWithAnything);
