@@ -1,9 +1,11 @@
 ;(function() {
   var Game = function(canvasId, runGame) {
-    document.getElementById("gameover").style.opacity = "0";
+
     var canvas = document.getElementById(canvasId);
     var screen = canvas.getContext('2d');
     var gameSize = { x: canvas.width, y: canvas.height };
+
+    document.getElementById("gameover").style.opacity = "0";
     if (runGame) {
       document.getElementById("start").style.opacity = "0";
     }
@@ -54,25 +56,26 @@
         this.bodies[i].update();
       }
       if (!playerThere) {
-        document.getElementById("gameover").style.opacity = "1";
-        document.getElementById("start").style.opacity = "1";
-        this.runGame = false;
-        document.getElementById("start").innerHTML = "Play Again?";
-        document.getElementById("gameover").innerHTML = "GAME OVER";
-        document.getElementById("start").onclick = function() {
-          new Game('screen', true);
-        };
+        this.gameOver(false);
       }
       if (!invaderThere) {
-        document.getElementById("gameover").style.opacity = "1";
-        document.getElementById("start").style.opacity = "1";
-        this.runGame = false;
-        document.getElementById("start").innerHTML = "Play Again?";
-        document.getElementById("gameover").innerHTML = "PLAYER WINS";
-        document.getElementById("start").onclick = function() {
-          new Game('screen', true);
-        };
+        this.gameOver(true);
       }
+    },
+
+    gameOver: function(won) {
+      document.getElementById("gameover").style.opacity = "1";
+      document.getElementById("start").style.opacity = "1";
+      this.runGame = false;
+      document.getElementById("start").innerHTML = "Play Again?";
+      var gameOverMessage = "GAME OVER";
+      if (won === true) {
+        gameOverMessage = "PLAYER WINS";
+      }
+      document.getElementById("gameover").innerHTML = gameOverMessage;
+      document.getElementById("start").onclick = function() {
+        new Game('screen', true);      };
+
     },
 
     draw: function(screen, gameSize) {
@@ -125,6 +128,7 @@
     this.center = { x: gameSize.x / 2, y: gameSize.y - this.size.x };
     this.keyboarder = new Keyboarder();
     this.color = "#0066aa";
+    this.recentBullet = false;
   };
 
   Player.prototype = {
@@ -135,12 +139,14 @@
         this.center.x += 2;
       }
 
-      if (this.keyboarder.isDown(this.keyboarder.KEYS.SPACE)) {
+      if (this.keyboarder.isDown(this.keyboarder.KEYS.SPACE) && this.recentBullet === false) {
         var bullet = new Bullet({ x: this.center.x, y: this.center.y - this.size.x / 2},
           {x: 0, y: -6});
         this.game.addBody(bullet);
         this.game.shootSound.load();
         this.game.shootSound.play();
+        this.recentBullet = true;
+        setTimeout(function() {this.recentBullet = false;}.bind(this), 200);
       }
     }
   };
@@ -152,7 +158,7 @@
     this.patrolX = 0;
     this.speedX = 0.3;
     this.holes = Math.floor((Math.random() * 3));
-    var rgbVal = Math.floor((Math.random() * 150));
+    var rgbVal = Math.floor((Math.random() * 120)) + 80;
     this.color = 'rgb(' + rgbVal + ',' + rgbVal + ','+ rgbVal + ')';
   };
 
@@ -188,7 +194,7 @@
     screen.fillRect(body.center.x - body.size.x / 2,
                     body.center.y - body.size.y / 2,
                     body.size.x, body.size.y);
-    screen.fillStyle = '#fff';
+    screen.fillStyle = '#000';
     if (holes === 1) {
       screen.fillRect(body.center.x - body.size.x / 4,
                       body.center.y - body.size.y / 4,
