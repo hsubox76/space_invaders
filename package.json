@@ -1,0 +1,22 @@
+{
+  "name": "space_invaders",
+  "version": "0.0.1",
+  "engines": {
+    "node": "0.12.0"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "description": "Mary Rose Cook did a [30-minute live-coding demo](https://vimeo.com/105955605) where she built a Space Invaders browser game with bare-bones JavaScript.",
+  "main": "game.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hsubox76/space_invaders.git"
+  },
+  "author": "Christina Holland",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hsubox76/space_invaders/issues"
+  },
+  "homepage": "https://github.com/hsubox76/space_invaders"
+}
