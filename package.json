@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/hsubox76/space_invaders/issues"
   },
-  "homepage": "https://github.com/hsubox76/space_invaders"
+  "homepage": "https://github.com/hsubox76/space_invaders",
+  "dependencies": {
+    "express": "^4.12.3"
+  }
 }
